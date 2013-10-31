@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/highlight/default.css"/>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/highlight/highlight.pack.js"></script>
+    
+    
+<script type="text/javascript">
+    $(document).ready(function(){
+    hljs.initHighlightingOnLoad();
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+
+<div style="min-height:600px;">
+    <ul class="list-unstyled">
+            
+        {% for p in pageposts.posts %}
+            <li class="well" style="padding:0">
+                <div style="padding:10px;color: #c09853;background-color: #fcf8e3;border-bottom:1px solid #e3e3e3">
+                    {% if user.is_authenticated %}
+                        {% if p.is_public %}
+                            Опубликованно
+                        {% else %}
+                            Неопубликованно
+                        {% endif %}
+                        {% if p.is_removed %}
+                            <strong style="color:red">Удаленно</strong>
+                        {% endif %}
+                        <br>
+                    {% endif %}
+
+                    <a href="/category/{{ p.category.slug }}/" rel="nofollow"><small style="color:grey;">{{ p.category.name }}</small></a>
+                     <span class="pull-right">
+                        {% for t in p.tags.all %}
+                            <a href="/tag/{{ t.slug }}" rel="nofollow"><small>{{ t.name }}</small></a>
+                        {% endfor %}
+                    </span>
+                    <h2><a href="/post/{{ p.slug }}/" rel="nofollow">{{ p.title }}</a></h2>
+                    
+                </div>
+                <div style="padding:10px 30px;font-size:14px;">
+                    {{ p.body|safe }}
+                </div>
+                {% if p.is_more %}
+                    <div>
+                        <a href="/post/{{ p.slug }}/" class="btn btn-sm btn-default" rel="nofollow">Далее ...</a>
+                    </div>
+                {% endif %}
+            </li>
+
+        {% endfor %}
+    </ul>
+</div>
+
+<ul class="pagination pull-right">
+    {% if  pageposts.page_previous %}
+        <li><a href="?page={{ pageposts.number_page_previous }}" rel="nofollow">«</a></li>
+    {% endif %}
+    
+    {% if pageposts.page_previous_range %}
+        <li>
+            <a href="/?page={{ pageposts.page_previous_range }}" rel="nofollow">...</a>
+        </li>
+    {% endif %}
+    
+    {% for i in pageposts.page_range %}
+        <li {% if pageposts.page == i %} class="active" {% endif %}>
+            <a href="/?page={{ i }}" rel="nofollow">{{ i }}</a>
+        </li>
+    {% endfor %}
+
+    {% if pageposts.page_next_range %}
+        <li>
+            <a href="/?page={{ pageposts.page_next_range }}" rel="nofollow">...</a>
+        </li>
+    {% endif %}
+
+    {% if  pageposts.page_next %}
+        <li><a href="?page={{ pageposts.number_page_next }}" rel="nofollow">»</a></li>
+    {% endif %}
+
+<ul>
+     
+{% endblock %}

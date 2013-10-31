@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <title>{% block title %}Блог о разработке {% endblock %}</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+	<meta content="Denis Y. Spichkin" name="author">
+    {% block meta_page %}
+        <meta name="keywords" content="Python Django JavaScript Backbone Backbonejs JQuery" />
+        <meta name="description" content="Еще один блог веб разработчика..." />
+    {% endblock %}
+
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/theme.css">
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-44015890-1', 'sdprog.ru');
+      ga('send', 'pageview');
+
+    </script>
+
+    
+    <script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter22296152 = new Ya.Metrika({id:22296152,
+                        clickmap:true,
+                        accurateTrackBounce:true});
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+    </script>
+    <noscript><div><img src="//mc.yandex.ru/watch/22296152" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+
+
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-2.0.1.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tagcloud.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            // Tag cloud
+            $.fn.tagcloud.defaults = {
+              size: {start: 14, end: 18, unit: 'pt'},
+              color: {start: '#cde', end: '#f52'}
+            };
+            $('#tagCloud a').tagcloud();
+        })
+    </script>
+
+
+    {% block extrahead %}
+
+    {% endblock %}
+
+</head>
+<body>
+
+    <div id="header" class="row" style="padding:10px;">
+        <div class="col-md-3">
+            <div class="logo">
+                <a href="/" rel="nofollow"><h1>Блог веб программиста</h1></a>
+                <p class="meta">Еще один блог о веб разработке ...</p>
+            </div>
+        </div>
+
+        <div class="col-md-8" style="margin-left:20px;">
+            <div style="width:728px;height:90px;">
+                <script type="text/javascript">
+                    <!--
+                    google_ad_client = "ca-pub-1844293074404584";
+                    /* SDProg_big */
+                    google_ad_slot = "1706953224";
+                    google_ad_width = 728;
+                    google_ad_height = 90;
+                    //-->
+                </script>
+                <script type="text/javascript"
+                    src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+                </script>
+            </div>
+            {% if user.is_authenticated %}
+                <div class="pull-right">
+                    Вы зашли под пользователем <strong>{{ user.username }}</strong>. Вы можете выйти <a href="{% url 'logout' %}">здесь</a>.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="content col-md-3" style="margin-left:20px;padding-right:0;font-size:15px;">
+
+        <div id="left-side" class="sidebar" style="padding-top:20px;">
+            <a href="/" rel="nofollow"><h3><span>Недавние посты</spam></h3></a>
+            <div class="menu_items">
+                <ul>
+                    {% for p in recent_post %}
+                        <li>
+                            <a href="/post/{{ p.slug }}/" title="{{ p.title }}" rel="nofollow"> - {{ p.title }}</a>
+                            {% if p.get_child_posts %}
+                                <ul style="font-size:12px;margin-left: -20px;">
+                                {% for sp in p.get_child_posts %}
+                                    <li>
+                                        <a href="/post/{{ sp.slug }}/" title="{{ sp.title }}" rel="nofollow"> - {{ sp.title }}</a>
+                                    </li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <h3><span>Рубрики</span></h3>
+            <div class="menu_items">
+                <ul>
+                    {% for c in categories %}
+                        <li><a href="/category/{{ c.slug }}/" rel="nofollow">{{ c.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <h3><span>Метки</span></h3>
+            <div id="tagCloud" class="menu_items" style="padding:20px;width:300px;">
+                {% for t in tags %}
+                    <a href="/tag/{{ t.slug }}/" data-weight="{{ t.weight }}" rel="nofollow">{{ t.name }}</a>
+                {% endfor %}
+            </div>
+
+            <h3><span>Архив</spam></h3>
+            <div style="margin-top:40px">
+                    <script type="text/javascript"><!--
+                        google_ad_client = "ca-pub-1844293074404584";
+                        /* SDProg_big_left */
+                        google_ad_slot = "8951018422";
+                        google_ad_width = 300;
+                        google_ad_height = 600;
+                        //-->
+                        </script>
+                    <script type="text/javascript"
+                        src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+                    </script>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        {% block content %}
+
+        {% endblock %}
+
+    
+    </div>
+
+
+    <div class="container">
+        <div class="copy pull-right">
+            <!-- <a href="/feed/" target="_blank"><img src="{{ STATIC_URL }}img/rss_icon.gif" /></a> -->
+            <p>Copyright &copy; 2013 - <a href="/" rel="nofollow">Еще один блог веб разработчика</a></p>
+        </div>
+    </div>
+
+</body>
+</html>

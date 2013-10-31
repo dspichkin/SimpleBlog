@@ -1,0 +1,7 @@
+*.pyc
+*.mo
+*~
+*.sqlite
+*.db
+local_settings.py
+*.sublime-*
